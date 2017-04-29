@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>-->
+    <!--<script src="https://raw.githubusercontent.com/admsev/jquery-play-sound/master/jquery.playSound.js"></script>-->s
   </head>
   <body onload="init();">
     <h1>Take a snapshot of the current video stream</h1>
@@ -26,8 +29,23 @@
                              navigator.msGetUserMedia);
 
       var video;
+      var counter;
       var webcamStream;
       var emptyFunction = function(){console.log('supposed to have stopped for 30 seconds')};
+
+      function playSound() {
+          return $(
+                 '<audio class="sound-player" autoplay="autoplay" style="display:none;">'
+                   + '<source src="' + arguments[0] + '" />'
+                   + '<embed src="' + arguments[0] + '" hidden="true" autostart="true" loop="false"/>'
+                 + '</audio>'
+               ).appendTo('body');
+      }
+
+      function stopSound() {
+          $(".sound-player").remove();
+      }
+
       function startWebcam() {
         if (navigator.getUserMedia) {
            navigator.getUserMedia (
@@ -43,6 +61,7 @@
                  video = document.querySelector('video');
                  video.src = window.URL.createObjectURL(localMediaStream);
                  webcamStream = localMediaStream;
+                 counter = 0;
                  setTimeout(snapshot, 1000);
               },
 
@@ -56,7 +75,7 @@
            console.log("getUserMedia not supported");
         }  
       }
-
+      
       function stopWebcam() {
           try {
             webcamStream.getTracks()[0].stop();
@@ -78,17 +97,42 @@
       }
 
       function snapshot() {
-         // Draws current image from the video element into the canvas
+         // Draws current imconsole.log(counter)age from the video element into the canvas
         try {
 
           ctx.drawImage(video, 0,0, canvas.width, canvas.height);
           var image = canvas.toDataURL("image/jpeg");
-          console.log('image is a ' + image);
+          $.ajax({
+            type: "POST", 
+            url: "/upload/",
+            data: { img: image ,csrfmiddlewaretoken: '{{ csrf_token }}'}      
+          }).done(function(msg){ 
+            if (msg == "1") {
+              // Good
+              counter = 0;
+              console.log(counter);
+            } else if (msg == "3") {
+              //alert("WAKE UP BETCH");
+              // Bad 1 count
+              counter += 1;
+              console.log(counter);
+              if (counter >= 5) {
+                alert("WAKE UP BETCH");
+                //playSound('http://example.org/sound.mp3');
+              }
+            } else {
+              // Unkown
+              alert("WAKE UP BETCH");
+              //playSound('http://example.org/sound.mp3');
+            }
+            //alert(msg);
+          });
 
         } catch (exception) {
-          console.log("Video stream not open")
+          console.log('The exception is ' + exception);
+          console.log("ERROR: Video stream not open")
         }
-        setTimeout(snapshot, 100 );
+        setTimeout(snapshot, 200 );
       }
 
   </script>
