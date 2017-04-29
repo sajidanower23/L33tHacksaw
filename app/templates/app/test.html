@@ -3,15 +3,15 @@
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!--<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>-->
-    <!--<script src="https://raw.githubusercontent.com/admsev/jquery-play-sound/master/jquery.playSound.js"></script>-->s
+    <!--<script src="https://raw.githubusercontent.com/admsev/jquery-play-sound/master/jquery.playSound.js"></script>-->
   </head>
   <body onload="init();">
-    <h1>Take a snapshot of the current video stream</h1>
-   Click on the Start WebCam button.
+    <h1>Hacksaw</h1>
+   Click on 'Start Driving' to get started
      <p>
-    <button onclick="startWebcam();">Start WebCam</button>
-    <button onclick="stopWebcam();">Stop WebCam</button> 
-       <button onclick="snapshot();">Take Snapshot</button> 
+    <button onclick="startWebcam();">Start Driving</button>
+    <!--button onclick="stopWebcam();">Stop WebCam</button> 
+       <button onclick="snapshot();">Take Snapshot</button--> 
     </p>
     <video onclick="snapshot(this);" width=400 height=400 id="video" controls autoplay></video>
   <p>
@@ -109,6 +109,7 @@
           }).done(function(msg){ 
             if (msg == "1") {
               // Good
+              stopSound();
               counter = 0;
               console.log(counter);
             } else if (msg == "3") {
@@ -117,13 +118,13 @@
               counter += 1;
               console.log(counter);
               if (counter >= 5) {
-                alert("WAKE UP BETCH");
-                //playSound('http://example.org/sound.mp3');
+                //alert("WAKE UP BETCH");
+                playSound('http://soundbible.com/grab.php?id=2176&type=mp3');
               }
             } else {
               // Unkown
-              alert("WAKE UP BETCH");
-              //playSound('http://example.org/sound.mp3');
+              //alert("WAKE UP BETCH");
+              playSound('http://soundbible.com/grab.php?id=2176&type=mp3');
             }
             //alert(msg);
           });
