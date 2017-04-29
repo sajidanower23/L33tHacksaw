@@ -14,7 +14,7 @@
   <p>
 
         Screenshots : <p>
-      <canvas  id="myCanvas" width="400" height="350"></canvas>  
+      <canvas  id="myCanvas" width="400" height="310"></canvas>  
   </body>
   <script>
       //--------------------
@@ -27,7 +27,7 @@
 
       var video;
       var webcamStream;
-
+      var emptyFunction = function(){console.log('supposed to have stopped for 30 seconds')};
       function startWebcam() {
         if (navigator.getUserMedia) {
            navigator.getUserMedia (
@@ -39,13 +39,18 @@
               },
 
               // successCallback
-              function(localMediaStream) {
-                  video = document.querySelector('video');
+              function (localMediaStream) {
+                 video = document.querySelector('video');
                  video.src = window.URL.createObjectURL(localMediaStream);
                  webcamStream = localMediaStream;
-                 snapshot();
+                 console.log('inside the important function');
+                 //setTimeout(emptyFunction, 30000);
+                 console.log('Function executed')
+                 setTimeout(snapshot, 1000);
+                 console.log('inside the important function 2');
 
               },
+
 
               // errorCallback
               function(err) {
@@ -58,7 +63,10 @@
       }
 
       function stopWebcam() {
-          webcamStream.stop();
+          try {
+            webcamStream.getTracks()[0].stop();
+          } catch (exception) {
+          }
       }
       //---------------------
       // TAKE A SNAPSHOT CODE
@@ -74,8 +82,12 @@
 
       function snapshot() {
          // Draws current image from the video element into the canvas
-        ctx.drawImage(video, 0,0, canvas.width, canvas.height);
-        setTimeout( snapshot(), 4000 );
+        try {
+          ctx.drawImage(video, 0,0, canvas.width, canvas.height);
+        } catch (exception) {
+          console.log("Video stream not open")
+        }
+        setTimeout(snapshot, 1000 );
       }
 
   </script>
