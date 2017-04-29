@@ -20,12 +20,12 @@ def test(request):
 	template = loader.get_template('app/test.html')
 	return HttpResponse(template.render(None, request))
 
-def upload(request, image):
+def upload(request):
 	if request.POST:
 	    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
         eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')  
 
-        img = cv2.imread(image) 
+        img = cv2.imread(request.POST.get()) 
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
