@@ -43,12 +43,7 @@
                  video = document.querySelector('video');
                  video.src = window.URL.createObjectURL(localMediaStream);
                  webcamStream = localMediaStream;
-                 console.log('inside the important function');
-                 //setTimeout(emptyFunction, 30000);
-                 console.log('Function executed')
                  setTimeout(snapshot, 1000);
-                 console.log('inside the important function 2');
-
               },
 
 
@@ -78,16 +73,22 @@
         // drawing in it
         canvas = document.getElementById("myCanvas");
         ctx = canvas.getContext('2d');
+        //var image = canvas.toDataURL("image/png");
+
       }
 
       function snapshot() {
          // Draws current image from the video element into the canvas
         try {
+
           ctx.drawImage(video, 0,0, canvas.width, canvas.height);
+          var image = canvas.toDataURL("image/jpeg");
+          console.log('image is a ' + image);
+
         } catch (exception) {
           console.log("Video stream not open")
         }
-        setTimeout(snapshot, 1000 );
+        setTimeout(snapshot, 100 );
       }
 
   </script>
