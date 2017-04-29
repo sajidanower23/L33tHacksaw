@@ -16,3 +16,7 @@ def index(request):
 	return HttpResponse(template.render(context, request))
 	
 	#return HttpResponse(template.render(request))
+
+def test(request):
+	template = loader.get_template('app/test.html')
+	return HttpResponse(template.render(None, request))
