@@ -1,4 +1,5 @@
 var video = document.querySelector("#videoElement");
+ 
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
  
 if (navigator.getUserMedia) {       
@@ -6,8 +7,7 @@ if (navigator.getUserMedia) {
 }
  
 function handleVideo(stream) {
-	//console.log('video is ' + typeof video);
-
+	console.log('video is ' + typeof video);
     video.src = window.URL.createObjectURL(stream);
 }
  
